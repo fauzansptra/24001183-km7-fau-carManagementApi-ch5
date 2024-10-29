@@ -1,10 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 module.exports = async (req, res, next) => {
-  // console.log(req.headers.authorization);
-
   try {
     const bearerToken = req.headers.authorization;
+    console.log(bearerToken);
     if (!bearerToken) {
       return res.status(401).json({
         status: "failed",
@@ -16,6 +15,17 @@ module.exports = async (req, res, next) => {
     const token = bearerToken.split("Bearer ")[1];
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(payload.userId);
+    if (user.role === "admin" || user.role === "superadmin") {
+      req.user = user;
+      next();
+    } else {
+      return res.status(401).json({
+        status: "failed",
+        message: "Lu bukan admin",
+        isSucces: false,
+        data: null,
+      });
+    }
     // if (bearerToken) {
     //   return res.status(401).json({
     //     status: "failed",
@@ -24,9 +34,6 @@ module.exports = async (req, res, next) => {
     //     data: null,
     //   });
     // }
-
-    req.user = user;
-    next();
   } catch (error) {
     return res.status(500).json({
       status: "failed",
