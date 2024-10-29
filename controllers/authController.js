@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Auths, Users } = require("../models");
+const { Auth, User } = require("../models");
 const bcrypt = require("bcrypt");
 const { da, tr } = require("@faker-js/faker");
 
@@ -19,8 +19,8 @@ const login = async (req, res, next) => {
 
     // const emailUser=await
 
-    const data = await Auths.findOne({
-      include: [{ model: Users, as: "user" }],
+    const data = await Auth.findOne({
+      include: [{ model: User, as: "user" }],
       where: {
         email,
       },
@@ -65,6 +65,7 @@ const login = async (req, res, next) => {
       });
     }
   } catch (err) {
+    // console.log("error coy"),
     res.status(500).json({
       status: "Success",
       message: err.message,
