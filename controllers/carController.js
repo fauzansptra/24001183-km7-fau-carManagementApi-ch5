@@ -65,6 +65,8 @@ const getAllCar = async (req, res) => {
 
     const offset = (page - 1) * limit;
     // const cars = await Cars.findAll();
+    console.log(Car);
+
     const cars = await Car.findAndCountAll({
       where: carCondition,
       limit: parseInt(limit),
