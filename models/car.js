@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Car extends Model {
     /**
@@ -13,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   Car.init(
     {
-      brand: DataTypes.STRING,
-      model: DataTypes.STRING,
-      year: DataTypes.INTEGER,
+      brand: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      model: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      year: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       createdBy: DataTypes.INTEGER,
       updatedBy: DataTypes.INTEGER,
       deletedBy: DataTypes.INTEGER,
@@ -24,7 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Car",
+      paranoid: true,
+      deletedAt: "deletedAt",
     }
   );
+
   return Car;
 };
