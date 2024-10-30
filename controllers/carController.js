@@ -160,6 +160,7 @@ const getCarById = async (req, res) => {
 const updateCar = async (req, res) => {
   const id = req.params.id;
   const { brand, model, year } = req.body;
+  const user = req.user;
 
   try {
     const cars = await Car.findOne({
@@ -193,6 +194,7 @@ const updateCar = async (req, res) => {
           brand,
           model,
           year,
+          updatedBy: user.id,
         },
       },
     });
@@ -219,16 +221,17 @@ const updateCar = async (req, res) => {
 
 const deleteCar = async (req, res) => {
   const id = req.params.id;
+  const user = req.user; // The authenticated user
 
   try {
-    const cars = await Car.findOne({
+    const car = await Car.findOne({
       where: {
         id,
       },
     });
 
-    if (!cars) {
-      res.status(404).json({
+    if (!car) {
+      return res.status(404).json({
         status: "Failed",
         message: "Data not found",
         isSuccess: false,
@@ -236,7 +239,16 @@ const deleteCar = async (req, res) => {
       });
     }
 
-    await Cars.destroy();
+    // Soft delete the car and set deletedBy
+    await Car.update(
+      { deletedBy: user.id }, // Record who deleted
+      { where: { id } }
+    );
+
+    // The soft delete action is automatic with paranoid: true
+    await Car.destroy({
+      where: { id },
+    });
 
     res.status(200).json({
       status: "Success",
