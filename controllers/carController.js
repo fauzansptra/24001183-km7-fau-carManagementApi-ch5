@@ -3,12 +3,14 @@ const { Op } = require("sequelize");
 
 const createCar = async (req, res) => {
   const { brand, model, year } = req.body;
-
+  const user = req.user;
+  console.log(user);
   try {
     const newCar = await Car.create({
       brand,
       model,
       year,
+      createdBy: user.id,
     });
 
     res.status(201).json({
@@ -39,7 +41,7 @@ const createCar = async (req, res) => {
     } else {
       return res.status(500).json({
         status: "Failed",
-        message: "An unexpected error occurred",
+        message: error.message,
         isSuccess: false,
         data: null,
       });
