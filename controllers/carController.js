@@ -66,7 +66,7 @@ const getAllCar = async (req, res) => {
     if (model) carCondition.model = { [Op.iLike]: `%${model}%` };
 
     const offset = (page - 1) * limit;
-    // const cars = await Cars.findAll();
+    // const car = await Cars.findAll();
     console.log(Car);
 
     const cars = await Car.findAndCountAll({
@@ -159,18 +159,19 @@ const getCarById = async (req, res) => {
 
 const updateCar = async (req, res) => {
   const id = req.params.id;
+  console.log(id);
   const { brand, model, year } = req.body;
   const user = req.user;
 
   try {
-    const cars = await Car.findOne({
-      where: {
-        id,
-      },
+    // Find the car first
+    const car = await Car.findOne({
+      where: { id },
     });
 
-    if (!cars) {
-      res.status(404).json({
+    // If the car doesn't exist, return a 404
+    if (!car) {
+      return res.status(404).json({
         status: "Failed",
         message: "Data not found",
         isSuccess: false,
@@ -178,24 +179,28 @@ const updateCar = async (req, res) => {
       });
     }
 
-    await Cars.update({
-      brand,
-      model,
-      year,
-    });
+    // Update the car record, specifying the condition for the update
+    await Car.update(
+      {
+        brand,
+        model,
+        year,
+        updatedBy: user.id,
+      },
+      {
+        where: { id }, // Specify the condition to find the right record
+      }
+    );
+
+    // Optionally retrieve the updated car record
+    const updatedCar = await Car.findOne({ where: { id } });
 
     res.status(200).json({
       status: "Success",
-      message: "Success update cars",
+      message: "Success update car",
       isSuccess: true,
       data: {
-        cars: {
-          id,
-          brand,
-          model,
-          year,
-          updatedBy: user.id,
-        },
+        car: updatedCar, // Return the updated car object
       },
     });
   } catch (error) {
