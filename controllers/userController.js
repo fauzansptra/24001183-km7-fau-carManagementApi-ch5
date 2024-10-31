@@ -1,5 +1,6 @@
-const { User } = require("../models");
+const { User, Auth } = require("../models");
 const { Op } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 const findUsers = async (req, res, next) => {
   try {
@@ -66,10 +67,6 @@ const findUsers = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  findUsers,
-};
-
 const findUserById = async (req, res, next) => {
   try {
     const user = await User.findOne({
@@ -132,10 +129,87 @@ const deleteUser = async (req, res, next) => {
     });
   } catch (err) {}
 };
+const createAdmin = async (req, res) => {
+  try {
+    const { name, age, address, email, password } = req.body;
+
+    // Pastikan hanya superadmin yang bisa mengakses endpoint ini
+    if (req.user.role !== "superadmin") {
+      return res.status(403).json({
+        status: "Failed",
+        message: "Forbidden: Only superadmin can create admin.",
+      });
+    }
+
+    // Hash password sebelum menyimpan
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    const user = await User.create({
+      name,
+      age,
+      address,
+      role: "admin",
+      // authId: auth.id, // Sesuaikan jika ada relasi foreign key
+    });
+    // Buat akun auth terlebih dahulu
+    const auth = await Auth.create({
+      email,
+      password: hashedPassword,
+      userId: user.id,
+    });
+
+    // Lalu buat user dengan peran admin, menggunakan authId untuk menghubungkan dengan akun Auth
+
+    res.status(201).json({
+      status: "Success",
+      message: "Admin created successfully",
+      data: {
+        id: user.id,
+        name: user.name,
+        email: auth.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log("Error di mari");
+
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+    });
+  }
+};
+const getCurrentUser = async (req, res) => {
+  try {
+    // Assuming req.user is populated by your authentication middleware
+    console.log(req.user);
+    const userId = req.user.id; // Extracted from the JWT
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "Error",
+      message: err.message,
+    });
+  }
+};
 
 module.exports = {
   findUsers,
   findUserById,
   updateUser,
   deleteUser,
+  createAdmin,
+  getCurrentUser,
 };
