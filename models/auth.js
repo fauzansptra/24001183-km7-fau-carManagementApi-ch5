@@ -30,17 +30,17 @@ module.exports = (sequelize, DataTypes) => {
           len: [6, 100],
         },
       },
-      confirmPassword: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          isSameAsPassword(value) {
-            if (value !== this.password) {
-              throw new Error("Passwords must match");
-            }
-          },
-        },
-      },
+      // confirmPassword: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //   validate: {
+      //     isSameAsPassword(value) {
+      //       if (value !== this.password) {
+      //         throw new Error("Passwords must match");
+      //       }
+      //     },
+      //   },
+      // },
       userId: {
         type: DataTypes.INTEGER,
         references: {

@@ -17,7 +17,6 @@ module.exports = (allowedRoles) => {
 
       const token = bearerToken.split(" ")[1];
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-
       const user = await User.findByPk(payload.userId);
 
       if (!user) {
