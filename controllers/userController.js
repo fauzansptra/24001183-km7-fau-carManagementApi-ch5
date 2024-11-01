@@ -2,6 +2,59 @@ const { User, Auth } = require("../models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+const findUserById = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+        isSuccess: false,
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+      isSuccess: false,
+    });
+  }
+};
 const findUsers = async (req, res) => {
   try {
     const {
@@ -62,37 +115,6 @@ const findUsers = async (req, res) => {
       message: error.message,
       isSuccess: false,
       data: null,
-    });
-  }
-};
-
-const findUserById = async (req, res) => {
-  try {
-    const user = await User.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: "Failed",
-        message: "User not found",
-        isSuccess: false,
-      });
-    }
-
-    res.status(200).json({
-      status: "Success",
-      data: {
-        user,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "Failed",
-      message: error.message,
-      isSuccess: false,
     });
   }
 };
@@ -207,30 +229,6 @@ const createAdmin = async (req, res) => {
     console.error("Error creating admin:", error);
     res.status(500).json({
       status: "Failed",
-      message: error.message,
-    });
-  }
-};
-
-const getCurrentUser = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).json({
-        status: "Failed",
-        message: "User not found",
-      });
-    }
-
-    res.status(200).json({
-      status: "Success",
-      data: user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "Error",
       message: error.message,
     });
   }

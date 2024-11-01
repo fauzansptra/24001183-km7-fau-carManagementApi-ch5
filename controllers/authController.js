@@ -28,14 +28,14 @@ const register = async (req, res) => {
       status: "Success",
       message: "User registered successfully",
       data: {
-        username: newUser.name,
+        userName: newUser.name,
         email: newAuth.email,
       },
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: "Failed",
-      message: err.message,
+      message: error.message,
       data: null,
     });
   }
@@ -71,7 +71,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: data.id,
-        username: data.user.name,
+        userName: data.user.name,
         email: data.email,
         userId: data.user.id,
       },
@@ -83,12 +83,12 @@ const login = async (req, res) => {
       status: "Success",
       message: "Success login",
       success: true,
-      data: { username: data.user.name, token },
+      data: { userName: data.user.name, token },
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: "Failed",
-      message: err.message,
+      message: error.message,
       data: null,
     });
   }

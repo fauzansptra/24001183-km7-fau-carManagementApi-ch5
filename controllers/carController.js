@@ -22,8 +22,6 @@ const createCar = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error.stack);
-
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
       return res.status(400).json({
@@ -108,7 +106,7 @@ const getAllCar = async (req, res) => {
     console.error(error.stack);
 
     if (error.name === "SequelizeValidationError") {
-      const errorMessage = error.errors.map((err) => err.message);
+      const errorMessage = error.errors.map((error) => error.message);
       return res.status(400).json({
         status: "Failed",
         message: errorMessage[0],
@@ -157,7 +155,7 @@ const getCarById = async (req, res) => {
     console.error(error.stack);
 
     if (error.name === "SequelizeValidationError") {
-      const errorMessage = error.errors.map((err) => err.message);
+      const errorMessage = error.errors.map((error) => error.message);
       return res.status(400).json({
         status: "Failed",
         message: errorMessage[0],

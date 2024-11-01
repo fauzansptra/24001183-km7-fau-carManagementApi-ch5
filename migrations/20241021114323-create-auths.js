@@ -26,18 +26,7 @@ module.exports = {
           len: [6, 100],
         },
       },
-      // confirmPassword: {
-      //   type: Sequelize.STRING,
-      //   allowNull: false,
-      //   validate: {
-      //     len: [6, 100],
-      //     isSameAsPassword(value) {
-      //       if (value !== this.password) {
-      //         throw new Error('Passwords must match');
-      //       }
-      //     }
-      //   }
-      // },
+
       userId: {
         type: Sequelize.INTEGER,
         references: {
