@@ -5,15 +5,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r dotenv/config bin/www",
-    "dev": "nodemon -r dotenv/config bin/www"
+    "dev": "nodemon -r dotenv/config bin/www",
+    "sequelize": "sequelize",
+    "db:migrate": "sequelize db:migrate",
+    "db:seed": "sequelize db:seed:all",
+    "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
+    "db:rollback": "sequelize db:migrate:undo"
   },
   "author": "Fauzan Saputra",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
@@ -21,6 +28,7 @@
     "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
     "faker": "^5.5.3",
     "nodemon": "^3.1.7"
   }
