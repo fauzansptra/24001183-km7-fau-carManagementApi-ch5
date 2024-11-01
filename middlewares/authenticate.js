@@ -28,7 +28,6 @@ module.exports = (allowedRoles) => {
         });
       }
 
-      // Check if user's role is within the allowed roles for this route
       if (allowedRoles.includes(user.role)) {
         req.user = user;
         return next();

@@ -10,7 +10,6 @@ router.get(
   authenticate(["admin", "superadmin", "member"]),
   userController.getCurrentUser
 );
-
 router.get("/:id", userController.findUserById);
 router.patch("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
