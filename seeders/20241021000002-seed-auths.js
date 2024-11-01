@@ -18,7 +18,6 @@ module.exports = {
       auths.push({
         email: faker.internet.email(),
         password: hashedPassword,
-        // confirmPassword: hashedPassword,
         userId: userIds[i % userIds.length].id,
         createdAt: new Date(),
         updatedAt: new Date(),

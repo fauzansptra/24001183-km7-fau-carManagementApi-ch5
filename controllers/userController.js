@@ -2,7 +2,7 @@ const { User, Auth } = require("../models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 
-const findUsers = async (req, res, next) => {
+const findUsers = async (req, res) => {
   try {
     const {
       name,
@@ -27,7 +27,6 @@ const findUsers = async (req, res, next) => {
       where: userCondition,
       limit: parseInt(limit),
       offset: parseInt(offset),
-      // order: [[sortBy, order.toUpperCase()]],
       attributes: ["id", "name", "age", "address", "role"],
     });
 
@@ -36,7 +35,7 @@ const findUsers = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "User fetched successfully",
+      message: "Users fetched successfully",
       isSuccess: true,
       data: {
         totalData,
@@ -67,13 +66,21 @@ const findUsers = async (req, res, next) => {
   }
 };
 
-const findUserById = async (req, res, next) => {
+const findUserById = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
         id: req.params.id,
       },
     });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+        isSuccess: false,
+      });
+    }
 
     res.status(200).json({
       status: "Success",
@@ -81,20 +88,20 @@ const findUserById = async (req, res, next) => {
         user,
       },
     });
-  } catch (err) {}
+  } catch (error) {
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+      isSuccess: false,
+    });
+  }
 };
 
-const updateUser = async (req, res, next) => {
+const updateUser = async (req, res) => {
   const { name, age, role, address } = req.body;
   try {
-    await User.update(
-      {
-        name,
-        age,
-        role,
-        address,
-        // shopId,
-      },
+    const [updated] = await User.update(
+      { name, age, role, address },
       {
         where: {
           id: req.params.id,
@@ -102,20 +109,43 @@ const updateUser = async (req, res, next) => {
       }
     );
 
+    if (!updated) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+        isSuccess: false,
+      });
+    }
+
     res.status(200).json({
       status: "Success",
-      message: "sukses update user",
+      message: "User updated successfully",
+      isSuccess: true,
     });
-  } catch (err) {}
+  } catch (error) {
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+      isSuccess: false,
+    });
+  }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteUser = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
         id: req.params.id,
       },
     });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "User not found",
+        isSuccess: false,
+      });
+    }
 
     await User.destroy({
       where: {
@@ -125,15 +155,22 @@ const deleteUser = async (req, res, next) => {
 
     res.status(200).json({
       status: "Success",
-      message: "sukses delete user",
+      message: "User deleted successfully",
+      isSuccess: true,
     });
-  } catch (err) {}
+  } catch (error) {
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+      isSuccess: false,
+    });
+  }
 };
+
 const createAdmin = async (req, res) => {
   try {
     const { name, age, address, email, password } = req.body;
 
-    // Pastikan hanya superadmin yang bisa mengakses endpoint ini
     if (req.user.role !== "superadmin") {
       return res.status(403).json({
         status: "Failed",
@@ -141,7 +178,6 @@ const createAdmin = async (req, res) => {
       });
     }
 
-    // Hash password sebelum menyimpan
     const hashedPassword = bcrypt.hashSync(password, 10);
 
     const user = await User.create({
@@ -149,16 +185,13 @@ const createAdmin = async (req, res) => {
       age,
       address,
       role: "admin",
-      // authId: auth.id, // Sesuaikan jika ada relasi foreign key
     });
-    // Buat akun auth terlebih dahulu
+
     const auth = await Auth.create({
       email,
       password: hashedPassword,
       userId: user.id,
     });
-
-    // Lalu buat user dengan peran admin, menggunakan authId untuk menghubungkan dengan akun Auth
 
     res.status(201).json({
       status: "Success",
@@ -171,19 +204,17 @@ const createAdmin = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("Error di mari");
-
+    console.error("Error creating admin:", error);
     res.status(500).json({
       status: "Failed",
       message: error.message,
     });
   }
 };
+
 const getCurrentUser = async (req, res) => {
   try {
-    // Assuming req.user is populated by your authentication middleware
-    console.log(req.user);
-    const userId = req.user.id; // Extracted from the JWT
+    const userId = req.user.id;
     const user = await User.findByPk(userId);
 
     if (!user) {
@@ -197,10 +228,10 @@ const getCurrentUser = async (req, res) => {
       status: "Success",
       data: user,
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: "Error",
-      message: err.message,
+      message: error.message,
     });
   }
 };

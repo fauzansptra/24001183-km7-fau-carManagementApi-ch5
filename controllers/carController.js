@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const createCar = async (req, res) => {
   const { brand, model, year } = req.body;
   const user = req.user;
-  console.log(user);
+
   try {
     const newCar = await Car.create({
       brand,
@@ -15,14 +15,15 @@ const createCar = async (req, res) => {
 
     res.status(201).json({
       status: "Success",
-      message: "Success create new product",
+      message: "Successfully created a new car",
       isSuccess: true,
       data: {
         newCar,
       },
     });
   } catch (error) {
-    console.log(error.name);
+    console.error(error.stack);
+
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
       return res.status(400).json({
@@ -61,13 +62,26 @@ const getAllCar = async (req, res) => {
       order = "ASC",
     } = req.query;
 
+    const validSortFields = ["brand", "model", "year"];
+    const validOrders = ["ASC", "DESC"];
+
+    if (
+      !validSortFields.includes(sortBy) ||
+      !validOrders.includes(order.toUpperCase())
+    ) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Invalid sortBy or order parameter",
+        isSuccess: false,
+        data: null,
+      });
+    }
+
     const carCondition = {};
     if (brand) carCondition.brand = { [Op.iLike]: `%${brand}%` };
     if (model) carCondition.model = { [Op.iLike]: `%${model}%` };
 
     const offset = (page - 1) * limit;
-    // const car = await Cars.findAll();
-    console.log(Car);
 
     const cars = await Car.findAndCountAll({
       where: carCondition,
@@ -81,7 +95,7 @@ const getAllCar = async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "cars fetched successfully",
+      message: "Cars fetched successfully",
       isSuccess: true,
       data: {
         totalData,
@@ -91,7 +105,7 @@ const getAllCar = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error.name);
+    console.error(error.stack);
 
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
@@ -116,28 +130,32 @@ const getCarById = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const cars = await Car.findOne({
+    const car = await Car.findOne({
       where: {
         id,
       },
-      // include: [
-      //   {
-      //     model: Shops,
-      //     as: "shop",
-      //   },
-      // ],
     });
+
+    if (!car) {
+      return res.status(404).json({
+        status: "Failed",
+        message: "Car not found",
+        isSuccess: false,
+        data: null,
+      });
+    }
 
     res.status(200).json({
       status: "Success",
-      message: "Success get cars data",
+      message: "Successfully retrieved car data",
       isSuccess: true,
       data: {
-        cars,
+        car,
       },
     });
   } catch (error) {
-    console.log(error.name);
+    console.error(error.stack);
+
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
       return res.status(400).json({
@@ -159,27 +177,23 @@ const getCarById = async (req, res) => {
 
 const updateCar = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const { brand, model, year } = req.body;
   const user = req.user;
 
   try {
-    // Find the car first
     const car = await Car.findOne({
       where: { id },
     });
 
-    // If the car doesn't exist, return a 404
     if (!car) {
       return res.status(404).json({
         status: "Failed",
-        message: "Data not found",
+        message: "Car not found",
         isSuccess: false,
         data: null,
       });
     }
 
-    // Update the car record, specifying the condition for the update
     await Car.update(
       {
         brand,
@@ -188,23 +202,23 @@ const updateCar = async (req, res) => {
         updatedBy: user.id,
       },
       {
-        where: { id }, // Specify the condition to find the right record
+        where: { id },
       }
     );
 
-    // Optionally retrieve the updated car record
     const updatedCar = await Car.findOne({ where: { id } });
 
     res.status(200).json({
       status: "Success",
-      message: "Success update car",
+      message: "Successfully updated car",
       isSuccess: true,
       data: {
-        car: updatedCar, // Return the updated car object
+        car: updatedCar,
       },
     });
   } catch (error) {
-    console.log(error.name);
+    console.error(error.stack);
+
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
       return res.status(400).json({
@@ -226,7 +240,7 @@ const updateCar = async (req, res) => {
 
 const deleteCar = async (req, res) => {
   const id = req.params.id;
-  const user = req.user; // The authenticated user
+  const user = req.user;
 
   try {
     const car = await Car.findOne({
@@ -238,31 +252,27 @@ const deleteCar = async (req, res) => {
     if (!car) {
       return res.status(404).json({
         status: "Failed",
-        message: "Data not found",
+        message: "Car not found",
         isSuccess: false,
         data: null,
       });
     }
 
-    // Soft delete the car and set deletedBy
-    await Car.update(
-      { deletedBy: user.id }, // Record who deleted
-      { where: { id } }
-    );
+    await Car.update({ deletedBy: user.id }, { where: { id } });
 
-    // The soft delete action is automatic with paranoid: true
     await Car.destroy({
       where: { id },
     });
 
     res.status(200).json({
       status: "Success",
-      message: "Success delete product",
+      message: "Successfully deleted car",
       isSuccess: true,
       data: null,
     });
   } catch (error) {
-    console.log(error.name);
+    console.error(error.stack);
+
     if (error.name === "SequelizeValidationError") {
       const errorMessage = error.errors.map((err) => err.message);
       return res.status(400).json({
