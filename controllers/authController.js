@@ -7,6 +7,14 @@ const register = async (req, res) => {
   try {
     const { name, age, address, email, password } = req.body;
 
+    if (!password || password.length < 6 || password.length > 100) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Password must be between 6 and 100 characters",
+        data: null,
+      });
+    }
+
     const existingUser = await Auth.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({
