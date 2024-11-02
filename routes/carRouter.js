@@ -5,7 +5,17 @@ const authenticate = require("../middlewares/authenticate");
 
 router.post("", authenticate(["admin", "superadmin"]), carController.createCar);
 router.get("", carController.getAllCar);
-router.get("/:id", carController.getCarById);
+router.get(
+  "/soft-deleted",
+  authenticate(["admin", "superadmin"]),
+  carController.getDeletedCars
+);
+router.get(
+  "/:id",
+  authenticate(["admin", "superadmin"]),
+  carController.getCarById
+);
+
 router.patch(
   "/:id",
   authenticate(["admin", "superadmin"]),
