@@ -155,10 +155,10 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    const userId = req.params.id;
+
     const user = await User.findOne({
-      where: {
-        id: req.params.id,
-      },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -169,10 +169,12 @@ const deleteUser = async (req, res) => {
       });
     }
 
+    await Auth.destroy({
+      where: { userId: userId },
+    });
+
     await User.destroy({
-      where: {
-        id: req.params.id,
-      },
+      where: { id: userId },
     });
 
     res.status(200).json({
@@ -181,6 +183,7 @@ const deleteUser = async (req, res) => {
       isSuccess: true,
     });
   } catch (error) {
+    console.error("Error deleting user:", error);
     res.status(500).json({
       status: "Failed",
       message: error.message,
