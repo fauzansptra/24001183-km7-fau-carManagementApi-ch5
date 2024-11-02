@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const authenticate = require("../middlewares/authenticate");
-const userController = require("../controllers/userController");
+const { userController } = require("../controllers");
 
 router.post("", authenticate(["superadmin"]), userController.createAdmin);
 router.get("", userController.findUsers);
