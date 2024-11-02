@@ -193,10 +193,20 @@ const createAdmin = async (req, res) => {
   try {
     const { name, age, address, email, password } = req.body;
 
-    if (req.user.role !== "superadmin") {
-      return res.status(403).json({
+    const existingAuth = await Auth.findOne({ where: { email } });
+    if (existingAuth) {
+      return res.status(400).json({
         status: "Failed",
-        message: "Forbidden: Only superadmin can create admin.",
+        message: "Email already exists",
+        data: null,
+      });
+    }
+
+    if (!password || password.length < 6 || password.length > 100) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Password must be between 6 and 100 characters long",
+        data: null,
       });
     }
 
