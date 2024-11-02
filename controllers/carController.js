@@ -123,6 +123,58 @@ const getAllCar = async (req, res) => {
     });
   }
 };
+const getDeletedCars = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+
+    const carCondition = {
+      deletedAt: { [Op.ne]: null },
+    };
+
+    const offset = (page - 1) * limit;
+
+    const cars = await Car.findAndCountAll({
+      where: carCondition,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      paranoid: false,
+    });
+
+    const totalData = cars.count;
+    const totalPages = Math.ceil(totalData / limit);
+
+    res.status(200).json({
+      status: "Success",
+      message: "Soft-deleted cars fetched successfully",
+      isSuccess: true,
+      data: {
+        totalData,
+        totalPages,
+        currentPage: parseInt(page),
+        cars: cars.rows,
+      },
+    });
+  } catch (error) {
+    console.error(error.stack);
+
+    if (error.name === "SequelizeValidationError") {
+      const errorMessage = error.errors.map((error) => error.message);
+      return res.status(400).json({
+        status: "Failed",
+        message: errorMessage[0],
+        isSuccess: false,
+        data: null,
+      });
+    }
+
+    res.status(500).json({
+      status: "Failed",
+      message: error.message,
+      isSuccess: false,
+      data: null,
+    });
+  }
+};
 
 const getCarById = async (req, res) => {
   const id = req.params.id;
@@ -293,6 +345,7 @@ const deleteCar = async (req, res) => {
 module.exports = {
   createCar,
   getAllCar,
+  getDeletedCars,
   getCarById,
   updateCar,
   deleteCar,

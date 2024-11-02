@@ -6,7 +6,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const cars = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
       cars.push({
         brand: faker.vehicle.manufacturer(),
         model: faker.vehicle.model(),
