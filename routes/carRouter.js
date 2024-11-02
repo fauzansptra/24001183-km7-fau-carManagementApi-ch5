@@ -10,11 +10,7 @@ router.get(
   authenticate(["admin", "superadmin"]),
   carController.getDeletedCars
 );
-router.get(
-  "/:id",
-  authenticate(["admin", "superadmin"]),
-  carController.getCarById
-);
+router.get("/:id", carController.getCarById);
 
 router.patch(
   "/:id",
