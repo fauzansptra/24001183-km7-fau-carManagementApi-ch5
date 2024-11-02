@@ -1,134 +1,4575 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Shop API",
-    "description": "API documentation for retrieving shop data",
+    "title": "RESTful API Car Management",
+    "description": "# 🚀 Get started here\n\nThis collection guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this collection**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these request types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT and PATCH requests.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a variable called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more scripts in \"Tests\" to verify if the API works as expected and execute flows.\n    \n\n## ℹ️ Resources\n\n[Building requests](https://learning.postman.com/docs/sending-requests/requests/)  \n[Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)  \n[Using variables](https://learning.postman.com/docs/sending-requests/variables/)  \n[Managing environments](https://learning.postman.com/docs/sending-requests/managing-environments/)  \n[Writing scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1",
-      "description": "Base URL for API"
+      "url": "http://{{base_url}}"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Car"
     }
   ],
   "paths": {
-    "/shops": {
+    "/users": {
       "get": {
-        "summary": "Get shops data",
-        "description": "Retrieve a paginated list of shops and their products.",
+        "tags": ["User"],
+        "summary": "All User",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "Limit the number of shop records returned.",
-            "required": false,
+            "name": "Authorization",
+            "in": "header",
             "schema": {
-              "type": "integer",
-              "example": 1
-            }
-          },
-          {
-            "name": "productName",
-            "in": "query",
-            "description": "Filter shops by product name.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "example": "pizza"
-            }
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "1015"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"3f7-4Xe6122dueYoO1/9ExmcIAe2qK0\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 19:45:36 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "Success"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Success get shops data"
-                    },
-                    "isSuccess": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "totalData": {
-                          "type": "integer",
-                          "example": 4
-                        },
-                        "totalPages": {
-                          "type": "integer",
-                          "example": 4
-                        },
-                        "currentPage": {
-                          "type": "integer",
-                          "example": 1
-                        },
-                        "shops": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "Koelpin Inc"
-                              },
-                              "adminEmail": {
-                                "type": "string",
-                                "nullable": true,
-                                "example": null
-                              },
-                              "products": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "name": {
-                                      "type": "string",
-                                      "example": "Incredible Fresh Pizza"
-                                    },
-                                    "images": {
-                                      "type": "array",
-                                      "items": {
-                                        "type": "string",
-                                        "example": "https://ik.imagekit.io/imamth/Profile-17-1729202156932_ieaMdNeZB.png?updatedAt=1729202158471"
-                                      }
-                                    },
-                                    "stock": {
-                                      "type": "integer",
-                                      "example": 25
-                                    },
-                                    "price": {
-                                      "type": "integer",
-                                      "example": 38761
-                                    }
-                                  }
-                                }
-                              },
-                              "user": {
-                                "type": "object",
-                                "properties": {
-                                  "name": {
-                                    "type": "string",
-                                    "example": "Mattie Schmeler"
-                                  }
-                                }
-                              }
-                            }
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Users fetched successfully",
+                  "isSuccess": true,
+                  "data": {
+                    "totalData": 24,
+                    "totalPages": 3,
+                    "currentPage": 1,
+                    "users": [
+                      {
+                        "id": 1,
+                        "name": "Carolyn Hammes MD",
+                        "age": 20,
+                        "address": "76633 The Grange",
+                        "role": "superadmin"
+                      },
+                      {
+                        "id": 2,
+                        "name": "Neal Blick",
+                        "age": 21,
+                        "address": "178 Towne Park",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 3,
+                        "name": "Tracy Zboncak",
+                        "age": 24,
+                        "address": "79271 Eva Rue",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 4,
+                        "name": "Annette Crona",
+                        "age": 24,
+                        "address": "147 Purdy Ways",
+                        "role": "member"
+                      },
+                      {
+                        "id": 5,
+                        "name": "Bernadette Haley",
+                        "age": 27,
+                        "address": "310 Dibbert Well",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 6,
+                        "name": "Jennie Lubowitz",
+                        "age": 13,
+                        "address": "3441 Park Crescent",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 7,
+                        "name": "Lindsey Greenholt",
+                        "age": 24,
+                        "address": "130 Russell Street",
+                        "role": "member"
+                      },
+                      {
+                        "id": 8,
+                        "name": "Cody Lemke",
+                        "age": 27,
+                        "address": "9867 Anais Crescent",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 9,
+                        "name": "Mrs. Julia Cronin",
+                        "age": 21,
+                        "address": "5648 Oleta Hills",
+                        "role": "admin"
+                      },
+                      {
+                        "id": 10,
+                        "name": "Gail Hermann",
+                        "age": 14,
+                        "address": "22135 Hettinger Creek",
+                        "role": "member"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "89"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"59-NFSlumn0WpYcsMAKkasZN5SAfOg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 19:50:17 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Token is missing or invalid",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 19:48:13 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User"],
+        "summary": "Create Admin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Tegar",
+                  "email": "tegara@mail.com",
+                  "password": "passwordddd",
+                  "age": 20,
+                  "address": "Malang"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token2}}"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "131"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"83-MjuFQFceQS2Oq5SVF45XJP/zx4E\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 19:53:34 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Admin created successfully",
+                  "data": {
+                    "id": 25,
+                    "name": "Tegar",
+                    "email": "tegar@mail.com",
+                    "role": "admin"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "64"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"40-YENDcAxynkiHV4BiaVAZu/YQzlg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:00:27 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - email already exist",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Email already exists",
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Failed - Password length",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Password must be between 6 and 100 characters long",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:02:26 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current-user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Current User",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzZXJuYW1lIjoiTm9lbCBSb2RyaWd1ZXoiLCJlbWFpbCI6Ik9ycmluLldhbGtlckB5YWhvby5jb20iLCJ1c2VySWQiOjEwLCJpYXQiOjE3MzA0MTE0OTIsImV4cCI6MTczMTAxNjI5Mn0.gwpMcGDzpz6mimX93tGWb8SFMCnJMgkkm36N6dUribw"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "194"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"c2-7MhVcVWDo/BjBqE/13ClmExRg4Y\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fri, 01 Nov 2024 00:06:29 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "data": {
+                    "id": 10,
+                    "name": "Noel Rodriguez",
+                    "age": 20,
+                    "address": "60145 Corwin Lake",
+                    "role": "member",
+                    "createdAt": "2024-10-31T21:02:52.753Z",
+                    "updatedAt": "2024-10-31T21:02:52.753Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "78"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4e-iTvNsTng/v0SkpknVOCWFeCv1tw\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fri, 01 Nov 2024 00:07:47 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - Invalid Token",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token is invalid",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Current User",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token is missing or invalid",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/1": {
+      "get": {
+        "tags": ["User"],
+        "summary": "User by Id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token2}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "198"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"c6-Hmg8ur81djNWAG79rlOeQ8UFngM\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:04:05 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "data": {
+                    "user": {
+                      "id": 20,
+                      "name": "Levi Keebler",
+                      "age": 14,
+                      "address": "181 The Ridings",
+                      "role": "admin",
+                      "createdAt": "2024-11-02T19:22:02.696Z",
+                      "updatedAt": "2024-11-02T19:22:02.696Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:05:32 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "64"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"40-ptZBLo0l7f+d0btJW+7uy54cZbA\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:04:53 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "User not found",
+                  "isSuccess": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "94"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"5e-ZO7PIcR8Pt7TBgI6MbHl2sCwK+o\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:05:09 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "invalid input syntax for type integer: \"a\"",
+                  "isSuccess": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User"],
+        "summary": "User",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Rifqie"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "75"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4b-xF+Fin0hPk4cRfFrfysTHSAqu8s\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:11:04 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "User updated successfully",
+                  "isSuccess": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "89"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"59-NFSlumn0WpYcsMAKkasZN5SAfOg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:08:12 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Token is missing or invalid",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:08:46 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "64"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"40-ptZBLo0l7f+d0btJW+7uy54cZbA\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:15:02 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "User not found",
+                  "isSuccess": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "User",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "75"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4b-Avt34Y3s2SQDM7JEcqZAeH9Sykk\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:19:11 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "User deleted successfully",
+                  "isSuccess": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "89"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"59-NFSlumn0WpYcsMAKkasZN5SAfOg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:14:27 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Token is missing or invalid",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:16:20 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "76"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4c-GsYP0p7wQNFmPrJamssr3C6bFd8\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:19:49 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "User not found",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "email": "superadmin@example.com",
+                  "password": "superadmin"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "349"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"15d-d5R1yi8uQ/KFkdIwirYjhksmd2w\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 19:41:55 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Success login",
+                  "success": true,
+                  "data": {
+                    "userName": "Carolyn Hammes MD",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlck5hbWUiOiJDYXJvbHluIEhhbW1lcyBNRCIsImVtYWlsIjoic3VwZXJhZG1pbkBleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwiaWF0IjoxNzMwNTc2NTE1LCJleHAiOjE3MzExODEzMTV9.rD-Upz2z9LVaMTSYUOF9JQTDUsh4PA20xyiZE4fItn4"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "62"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"3e-o8c75EUhYRSNgZb9phfaXWPcJWE\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:27:48 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "Wrong Password",
+                  "success": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "79"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4f-I0MeOCAdjZqGclrGKMxgYjNYN6s\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:28:14 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "User does not exist",
+                  "success": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Wahyu",
+                  "age": 20,
+                  "address": "Kosan sebelah Amikom",
+                  "email": "wahyuabc@mail.com",
+                  "password": "passwordddd"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "117"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"75-9O/BgFAtWlqc5eaBVqadK5oMqOk\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:37:42 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "User registered successfully",
+                  "data": {
+                    "userName": "Wahyu",
+                    "email": "wahyuabc@mail.com"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "64"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"40-YENDcAxynkiHV4BiaVAZu/YQzlg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 20:37:57 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - Email already exist",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Email already exists",
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Failed - Password length",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Password must be between 6 and 100 characters",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/": {
+      "get": {
+        "tags": ["Car"],
+        "summary": "All Cars",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "2136"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"858-BIXnfr17FofdK/cZFxUxswubATE\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:04:11 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Success",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 99,
+                        "totalPages": 10,
+                        "currentPage": 1,
+                        "cars": [
+                          {
+                            "id": 10,
+                            "brand": "Aston Martin",
+                            "model": "PT Cruiser",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 40,
+                            "brand": "Aston Martin",
+                            "model": "F-150",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 6,
+                            "brand": "Audi",
+                            "model": "Mustang",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 54,
+                            "brand": "Audi",
+                            "model": "911",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 95,
+                            "brand": "Bentley",
+                            "model": "XC90",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 82,
+                            "brand": "Bentley",
+                            "model": "Explorer",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 19,
+                            "brand": "Bentley",
+                            "model": "A4",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 65,
+                            "brand": "Bentley",
+                            "model": "Charger",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 73,
+                            "brand": "Bentley",
+                            "model": "Fiesta",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 27,
+                            "brand": "BMW",
+                            "model": "Civic",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
                           }
-                        }
+                        ]
+                      }
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Success - With filter",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 1,
+                        "totalPages": 1,
+                        "currentPage": 1,
+                        "cars": [
+                          {
+                            "id": 68,
+                            "brand": "Toyota",
+                            "model": "Alpine",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "example-2": {
+                    "summary": "Success- emptydata",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 0,
+                        "totalPages": 0,
+                        "currentPage": 1,
+                        "cars": []
+                      }
+                    }
+                  },
+                  "example-3": {
+                    "summary": "Success - Page selection empty data",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 99,
+                        "totalPages": 10,
+                        "currentPage": 5,
+                        "cars": [
+                          {
+                            "id": 86,
+                            "brand": "Honda",
+                            "model": "Colorado",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 48,
+                            "brand": "Honda",
+                            "model": "PT Cruiser",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 2,
+                            "brand": "Honda",
+                            "model": "Fiesta",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 12,
+                            "brand": "Hyundai",
+                            "model": "Aventador",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 25,
+                            "brand": "Hyundai",
+                            "model": "ATS",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 41,
+                            "brand": "Jaguar",
+                            "model": "Mercielago",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 62,
+                            "brand": "Jaguar",
+                            "model": "Volt",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 43,
+                            "brand": "Jaguar",
+                            "model": "Silverado",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 33,
+                            "brand": "Jeep",
+                            "model": "Focus",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 20,
+                            "brand": "Jeep",
+                            "model": "Altima",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "example-4": {
+                    "summary": "Success = sortByModel",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 99,
+                        "totalPages": 10,
+                        "currentPage": 1,
+                        "cars": [
+                          {
+                            "id": 75,
+                            "brand": "Fiat",
+                            "model": "1",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 14,
+                            "brand": "Lamborghini",
+                            "model": "2",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 54,
+                            "brand": "Audi",
+                            "model": "911",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 19,
+                            "brand": "Bentley",
+                            "model": "A4",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 57,
+                            "brand": "Toyota",
+                            "model": "A4",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 38,
+                            "brand": "Kia",
+                            "model": "A8",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 31,
+                            "brand": "Volkswagen",
+                            "model": "A8",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 45,
+                            "brand": "Dodge",
+                            "model": "Alpine",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 15,
+                            "brand": "Tesla",
+                            "model": "Alpine",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 68,
+                            "brand": "Toyota",
+                            "model": "Alpine",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "example-5": {
+                    "summary": "Success - order",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 99,
+                        "totalPages": 10,
+                        "currentPage": 1,
+                        "cars": [
+                          {
+                            "id": 22,
+                            "brand": "Volvo",
+                            "model": "Silverado",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 21,
+                            "brand": "Volvo",
+                            "model": "Fiesta",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 81,
+                            "brand": "Volvo",
+                            "model": "Roadster",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 61,
+                            "brand": "Volkswagen",
+                            "model": "Malibu",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 31,
+                            "brand": "Volkswagen",
+                            "model": "A8",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 50,
+                            "brand": "Toyota",
+                            "model": "Mercielago",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 5,
+                            "brand": "Toyota",
+                            "model": "Taurus",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 57,
+                            "brand": "Toyota",
+                            "model": "A4",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 68,
+                            "brand": "Toyota",
+                            "model": "Alpine",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 88,
+                            "brand": "Toyota",
+                            "model": "Roadster",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "example-6": {
+                    "summary": "Success - Limit data",
+                    "value": {
+                      "status": "Success",
+                      "message": "Cars fetched successfully",
+                      "isSuccess": true,
+                      "data": {
+                        "totalData": 99,
+                        "totalPages": 2,
+                        "currentPage": 1,
+                        "cars": [
+                          {
+                            "id": 40,
+                            "brand": "Aston Martin",
+                            "model": "F-150",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 10,
+                            "brand": "Aston Martin",
+                            "model": "PT Cruiser",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 6,
+                            "brand": "Audi",
+                            "model": "Mustang",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 54,
+                            "brand": "Audi",
+                            "model": "911",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 19,
+                            "brand": "Bentley",
+                            "model": "A4",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 65,
+                            "brand": "Bentley",
+                            "model": "Charger",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 82,
+                            "brand": "Bentley",
+                            "model": "Explorer",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 73,
+                            "brand": "Bentley",
+                            "model": "Fiesta",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 95,
+                            "brand": "Bentley",
+                            "model": "XC90",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 87,
+                            "brand": "BMW",
+                            "model": "Wrangler",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 7,
+                            "brand": "BMW",
+                            "model": "V90",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 94,
+                            "brand": "BMW",
+                            "model": "Element",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 90,
+                            "brand": "BMW",
+                            "model": "CX-9",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 27,
+                            "brand": "BMW",
+                            "model": "Civic",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 29,
+                            "brand": "BMW",
+                            "model": "Beetle",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 13,
+                            "brand": "Bugatti",
+                            "model": "Malibu",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 39,
+                            "brand": "Cadillac",
+                            "model": "Fiesta",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 17,
+                            "brand": "Chevrolet",
+                            "model": "Silverado",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 58,
+                            "brand": "Chevrolet",
+                            "model": "Model T",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 100,
+                            "brand": "Chevrolet",
+                            "model": "ATS",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 28,
+                            "brand": "Chevrolet",
+                            "model": "XC90",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 42,
+                            "brand": "Chevrolet",
+                            "model": "Fortwo",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 36,
+                            "brand": "Chevrolet",
+                            "model": "Prius",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 77,
+                            "brand": "Chrysler",
+                            "model": "LeBaron",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 37,
+                            "brand": "Chrysler",
+                            "model": "Prius",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 59,
+                            "brand": "Chrysler",
+                            "model": "Fortwo",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 45,
+                            "brand": "Dodge",
+                            "model": "Alpine",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 16,
+                            "brand": "Dodge",
+                            "model": "Durango",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 93,
+                            "brand": "Dodge",
+                            "model": "Grand Cherokee",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 49,
+                            "brand": "Dodge",
+                            "model": "Malibu",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 56,
+                            "brand": "Ferrari",
+                            "model": "Prius",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 84,
+                            "brand": "Ferrari",
+                            "model": "Aventador",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 55,
+                            "brand": "Fiat",
+                            "model": "Model S",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 72,
+                            "brand": "Fiat",
+                            "model": "CTS",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 75,
+                            "brand": "Fiat",
+                            "model": "1",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 78,
+                            "brand": "Ford",
+                            "model": "Aventador",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 47,
+                            "brand": "Ford",
+                            "model": "Wrangler",
+                            "year": 2019,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 4,
+                            "brand": "Ford",
+                            "model": "Golf",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 18,
+                            "brand": "Ford",
+                            "model": "Grand Caravan",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 80,
+                            "brand": "Honda",
+                            "model": "Focus",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 86,
+                            "brand": "Honda",
+                            "model": "Colorado",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 48,
+                            "brand": "Honda",
+                            "model": "PT Cruiser",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 2,
+                            "brand": "Honda",
+                            "model": "Fiesta",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.519Z",
+                            "updatedAt": "2024-11-02T20:27:35.519Z"
+                          },
+                          {
+                            "id": 12,
+                            "brand": "Hyundai",
+                            "model": "Aventador",
+                            "year": 2024,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 25,
+                            "brand": "Hyundai",
+                            "model": "ATS",
+                            "year": 2023,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 41,
+                            "brand": "Jaguar",
+                            "model": "Mercielago",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 62,
+                            "brand": "Jaguar",
+                            "model": "Volt",
+                            "year": 2020,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 43,
+                            "brand": "Jaguar",
+                            "model": "Silverado",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 33,
+                            "brand": "Jeep",
+                            "model": "Focus",
+                            "year": 2022,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          },
+                          {
+                            "id": 20,
+                            "brand": "Jeep",
+                            "model": "Altima",
+                            "year": 2021,
+                            "createdBy": 1,
+                            "updatedBy": null,
+                            "deletedBy": null,
+                            "deletedAt": null,
+                            "createdAt": "2024-11-02T20:27:35.520Z",
+                            "updatedAt": "2024-11-02T20:27:35.520Z"
+                          }
+                        ]
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "95"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"5f-RXZ8AZwoZPEKXU9En16+icoGE9A\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:17:43 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - Invalid sortBy parameter",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Invalid sortBy or order parameter",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Failed - invalid order parameter",
+                    "value": {
+                      "status": "Failed",
+                      "message": "Invalid sortBy or order parameter",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "post": {
+        "tags": ["Car"],
+        "summary": "Car",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "brand": "Toyota",
+                  "model": "RRR",
+                  "year": 2000
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "295"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"127-+4/l3RrvJHyT9dxWwqpePjOSagI\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:28:22 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Successfully created a new car",
+                  "isSuccess": true,
+                  "data": {
+                    "newCar": {
+                      "id": 101,
+                      "brand": "Toyota",
+                      "model": "RRR",
+                      "year": 2000,
+                      "createdBy": 1,
+                      "updatedAt": "2024-11-02T22:28:22.789Z",
+                      "createdAt": "2024-11-02T22:28:22.789Z",
+                      "updatedBy": null,
+                      "deletedBy": null,
+                      "deletedAt": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "106"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"6a-Hsb/zlSutlelfoxuemMtZmcTrqw\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:32:59 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "invalid input syntax for type integer: \"a\"",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "89"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"59-NFSlumn0WpYcsMAKkasZN5SAfOg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:24:52 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - token missing",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token is missing or invalid",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Failed - Expired Token",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token has expired",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:27:11 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/77": {
+      "delete": {
+        "tags": ["Car"],
+        "summary": "Car",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "86"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"56-xFF0nYrAXo9tq8rpBev+FjVm3+c\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:35:12 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Successfully deleted car",
+                  "isSuccess": true,
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "79"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4f-7dpxg+Pmd+ZEXccQVoZv6VsEl8o\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:34:12 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Token has expired",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:34:37 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "75"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4b-n6zLphQ8sTFpvV71y5L4uMUVgVo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:35:43 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "Car not found",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "106"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"6a-Hsb/zlSutlelfoxuemMtZmcTrqw\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:36:02 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "invalid input syntax for type integer: \"a\"",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/1": {
+      "patch": {
+        "tags": ["Car"],
+        "summary": "Car",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "brand": "honda"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "283"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"11b-vdbR7MRK8/g0wO0rq63gJdKuduI\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:39:14 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Successfully updated car",
+                  "isSuccess": true,
+                  "data": {
+                    "car": {
+                      "id": 2,
+                      "brand": "honda",
+                      "model": "Fiesta",
+                      "year": 2021,
+                      "createdBy": 1,
+                      "updatedBy": 1,
+                      "deletedBy": null,
+                      "deletedAt": null,
+                      "createdAt": "2024-11-02T20:27:35.519Z",
+                      "updatedAt": "2024-11-02T22:39:14.686Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "79"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4f-7dpxg+Pmd+ZEXccQVoZv6VsEl8o\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:36:55 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "example-0": {
+                    "summary": "Failed - token expired",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token has expired",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  },
+                  "example-1": {
+                    "summary": "Failed - Unauthorized",
+                    "value": {
+                      "status": "failed",
+                      "message": "Token is missing or invalid",
+                      "isSuccess": false,
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:37:35 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "75"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4b-n6zLphQ8sTFpvV71y5L4uMUVgVo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:40:29 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "Car not found",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "106"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"6a-PP0RBNx9y7KGDkXBNFuiJPo95KA\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:39:46 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "invalid input syntax for type integer: \"o\"",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/soft-deleted": {
+      "get": {
+        "tags": ["Car"],
+        "summary": "Deleted Car",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{token1}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "807"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"327-NcOK5bXrPjf6vyvj0CBbmKINSew\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:41:23 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Soft-deleted cars fetched successfully",
+                  "isSuccess": true,
+                  "data": {
+                    "totalData": 3,
+                    "totalPages": 1,
+                    "currentPage": 1,
+                    "cars": [
+                      {
+                        "id": 77,
+                        "brand": "Chrysler",
+                        "model": "LeBaron",
+                        "year": 2019,
+                        "createdBy": 1,
+                        "updatedBy": null,
+                        "deletedBy": 1,
+                        "deletedAt": "2024-11-02T22:36:37.338Z",
+                        "createdAt": "2024-11-02T20:27:35.520Z",
+                        "updatedAt": "2024-11-02T22:36:37.330Z"
+                      },
+                      {
+                        "id": 1,
+                        "brand": "Kia",
+                        "model": "V90",
+                        "year": 2024,
+                        "createdBy": 1,
+                        "updatedBy": null,
+                        "deletedBy": 1,
+                        "deletedAt": "2024-11-02T21:07:01.125Z",
+                        "createdAt": "2024-11-02T20:27:35.519Z",
+                        "updatedAt": "2024-11-02T21:07:01.118Z"
+                      },
+                      {
+                        "id": 3,
+                        "brand": "Smart",
+                        "model": "Grand Cherokee",
+                        "year": 2023,
+                        "createdBy": 1,
+                        "updatedBy": null,
+                        "deletedBy": 1,
+                        "deletedAt": "2024-11-02T22:35:12.268Z",
+                        "createdAt": "2024-11-02T20:27:35.519Z",
+                        "updatedAt": "2024-11-02T22:35:12.261Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "89"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"59-NFSlumn0WpYcsMAKkasZN5SAfOg\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:40:59 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Token is missing or invalid",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "101"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"65-ZEVNRjFOcSEfKGcGvRebdTSmZQo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:41:39 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "failed",
+                  "message": "Access denied: insufficient permissions",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/5": {
+      "get": {
+        "tags": ["Car"],
+        "summary": "Car by Id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "293"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"125-YYy0BAllpxW9vpngcsivvZ9X0Kw\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:23:00 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Success",
+                  "message": "Successfully retrieved car data",
+                  "isSuccess": true,
+                  "data": {
+                    "car": {
+                      "id": 2,
+                      "brand": "Honda",
+                      "model": "Fiesta",
+                      "year": 2021,
+                      "createdBy": 1,
+                      "updatedBy": null,
+                      "deletedBy": null,
+                      "deletedAt": null,
+                      "createdAt": "2024-11-02T20:27:35.519Z",
+                      "updatedAt": "2024-11-02T20:27:35.519Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "75"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"4b-n6zLphQ8sTFpvV71y5L4uMUVgVo\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:22:42 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "Car not found",
+                  "isSuccess": false,
+                  "data": null
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string",
+                  "example": "application/json; charset=utf-8"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer",
+                  "example": "106"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"6a-Hsb/zlSutlelfoxuemMtZmcTrqw\""
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Sat, 02 Nov 2024 22:23:25 GMT"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "status": "Failed",
+                  "message": "invalid input syntax for type integer: \"a\"",
+                  "isSuccess": false,
+                  "data": null
                 }
               }
             }
